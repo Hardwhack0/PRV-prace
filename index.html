@@ -4,77 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Technická podpora – VDF Games</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #e3e6e8;
-            color: #1a1a1a;
-            padding: 40px 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        h1 {
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
-        p {
-            font-size: 14px;
-            margin-bottom: 25px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: normal;
-            font-size: 15px;
-        }
-        textarea, input[type="email"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #a9b0b5;
-            border-radius: 3px;
-            box-sizing: border-box;
-            background-color: #f7f9fa;
-            font-family: inherit;
-            font-size: 14px;
-        }
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-        button {
-            padding: 8px 16px;
-            background-color: #ced4da;
-            border: 1px solid #adb5bd;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #333;
-        }
-        button:hover {
-            background-color: #b1b8be;
-        }
-        .support-response {
-            margin-top: 40px;
-        }
-        .support-response h2 {
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-        .response-box {
-            background-color: #e3e6e8;
-            border: 1px solid #b5bbc0;
-            padding: 20px;
-            border-radius: 3px;
-            font-size: 14px;
-            color: #333;
-            min-height: 40px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -82,7 +12,7 @@
         <h1>Technická podpora – VDF Games</h1>
         <p>Jak ti můžeme pomoct? Napiš, jaký máš problém.</p>
 
-        <form action="#" method="POST">
+        <form id="supportForm">
             <div class="form-group">
                 <label for="dotaz">Tvůj dotaz:</label>
                 <textarea id="dotaz" name="dotaz" placeholder="Např.: Po poslední aktualizaci se mi hra nespustí..."></textarea>
@@ -98,11 +28,11 @@
 
         <div class="support-response">
             <h2>Odpověď podpory:</h2>
-            <div class="response-box">
+            <div class="response-box" id="responseBox">
                 Zatím žádný dotaz.
             </div>
         </div>
     </div>
-
+    <script src="script.js"></script>
 </body>
 </html>
