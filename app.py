@@ -1,10 +1,12 @@
 import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from google import genai
 
 app = Flask(__name__)
-
 CORS(app)
+
+client = genai.Client(api_key=os.environ.get("GeminiAPIKey"))
 
 @app.get("/")
 def home():
@@ -14,14 +16,18 @@ def home():
 def chat():
     data = request.get_json(silent=True) or {}
     message = (data.get("message") or "").strip()
-    student = (data.get("student") or "unknown").strip()
 
     if not message:
         return jsonify({"error": "message is required"}), 400
 
-    reply = f"[DEMO] Přijal jsem dotaz od {student}: {message}"
-
-    return jsonify({"reply": reply})
+    try:
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=f"Jsi technická podpora. Odpověz stručně a česky na tento dotaz: {message}"
+        )
+        return jsonify({"reply": response.text})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8000"))
