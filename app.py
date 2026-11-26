@@ -1,4 +1,5 @@
 import os
+import time
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from google import genai
@@ -20,20 +21,21 @@ def chat():
     if not message:
         return jsonify({"error": "message is required"}), 400
 
-    try:
+    prompt = f"Jsi technická podpora. Odpověz stručně a česky na tento dotaz: {message}"
+
+    # Zkusí model až 3x (pokud má Google dočasně přetíženo 503, počká 2 sekundy)
+    for pokus in range(3):
         try:
             response = client.models.generate_content(
                 model="gemini-3.8-flash",
-                contents=f"Jsi technická podpora. Odpověz stručně a česky na tento dotaz: {message}"
+                contents=prompt
             )
-        except Exception:
-            response = client.models.generate_content(
-                model="gemini-3.8-flash-lite",
-                contents=f"Jsi technická podpora. Odpověz stručně a česky na tento dotaz: {message}"
-            )
-        return jsonify({"reply": response.text})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+            return jsonify({"reply": response.text})
+        except Exception as e:
+            if "503" in str(e) and pokus < 2:
+                time.sleep(2)
+                continue
+            return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8000"))
