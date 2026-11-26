@@ -22,7 +22,7 @@ def chat():
         return jsonify({"error": "message is required"}), 400
 
     prompt = f"Jsi technická podpora. Odpověz stručně a česky na tento dotaz: {message}"
-modely = ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-3.8-pro"]
+    modely = ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-3.8-pro"]
     posledni_chyba = ""
 
     for model_name in modely:
