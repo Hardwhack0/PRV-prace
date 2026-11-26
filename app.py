@@ -20,11 +20,17 @@ def chat():
     if not message:
         return jsonify({"error": "message is required"}), 400
 
-    try:
-        response = client.models.generate_content(
-            model="gemini-3.8-flash",
-            contents=f"Jsi technická podpora. Odpověz stručně a česky na tento dotaz: {message}"
-        )
+  try:
+        try:
+            response = client.models.generate_content(
+                model="gemini-3.8-flash",
+                contents=f"Jsi technická podpora. Odpověz stručně a česky na tento dotaz: {message}"
+            )
+        except Exception:
+            response = client.models.generate_content(
+                model="gemini-3.8-flash-lite",
+                contents=f"Jsi technická podpora. Odpověz stručně a česky na tento dotaz: {message}"
+            )
         return jsonify({"reply": response.text})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
