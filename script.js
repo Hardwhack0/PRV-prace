@@ -23,22 +23,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({
                     message: dotazText,
-                    student: 'Hardwhack0' // volitelně můžeš vzít i z inputu pro e-mail
+                    student: 'Hardwhack0'
                 })
             });
 
+            const data = await odpoved.json();
+
             if (!odpoved.ok) {
-                throw new Error(`Chyba serveru: ${odpoved.status}`);
+                throw new Error(data.error || `Chyba serveru: ${odpoved.status}`);
             }
 
-            const data = await odpoved.json();
             responseBox.innerHTML = data.reply;
             responseBox.style.color = 'green';
             supportForm.reset();
 
         } catch (chyba) {
             console.error('Chyba:', chyba);
-            responseBox.innerHTML = 'Nepodařilo se spojit se serverem.';
+            if (chyba.message.includes('503')) {
+                responseBox.innerHTML = 'AI je momentálně přetížená (chyba 503 ze strany Googlu). Zkuste dotaz odeslat znovu za chvilku.';
+            } else {
+                responseBox.innerHTML = `Chyba: ${chyba.message}`;
+            }
             responseBox.style.color = 'red';
         }
     });
