@@ -20,7 +20,7 @@ def chat():
     if not message:
         return jsonify({"error": "message is required"}), 400
 
-  try:
+    try:
         try:
             response = client.models.generate_content(
                 model="gemini-3.8-flash",
