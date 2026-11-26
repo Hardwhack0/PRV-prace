@@ -22,20 +22,22 @@ def chat():
         return jsonify({"error": "message is required"}), 400
 
     prompt = f"Jsi technická podpora. Odpověz stručně a česky na tento dotaz: {message}"
+    modely = ["gemini-3.8-flash", "gemini-3.8-pro", "gemini-2.5-flash-lite"]
+    posledni_chyba = ""
 
-    # Zkusí model až 3x (pokud má Google dočasně přetíženo 503, počká 2 sekundy)
-    for pokus in range(3):
+    for model_name in modely:
         try:
             response = client.models.generate_content(
-                model="gemini-3.8-flash",
+                model=model_name,
                 contents=prompt
             )
             return jsonify({"reply": response.text})
         except Exception as e:
-            if "503" in str(e) and pokus < 2:
-                time.sleep(2)
-                continue
-            return jsonify({"error": str(e)}), 500
+            posledni_chyba = str(e)
+            time.sleep(1)
+            continue
+
+    return jsonify({"error": f"Všechny modely jsou momentálně nedostupné: {posledni_chyba}"}), 503
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8000"))
